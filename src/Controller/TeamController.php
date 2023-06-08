@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
-
+use Knp\Component\Pager\PaginatorInterface;
 
 class TeamController extends AbstractController
 {
@@ -33,11 +33,18 @@ class TeamController extends AbstractController
     /**
      * @Route("/team/add", name="team_add")
      */
-    public function addTeam(Request $request)
+    public function addTeam(Request $request,PaginatorInterface $paginator)
     {
 
         $teamInfo = $this->getDoctrine()->getRepository(Teams::class)->findAll();
         $country = $this->getDoctrine()->getRepository(Country::class)->getCountry();
+
+          // Paginate the results of the query
+          $teamInfo = $paginator->paginate(
+            $teamInfo,
+            $request->query->getInt('page', 1),
+            5
+        );
 
         $atrributes = array('class' => 'form-control', 'style' => 'width:50%; margin-bottom:15px');
         $form = $this->createFormBuilder()
