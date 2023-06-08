@@ -46,6 +46,7 @@
             <th>Name</th> 
             <th>SurName</th> 
             <th>Team</th>
+			<th>Contry</th>
           
             <th></th> 
         </tr> 
@@ -57,7 +58,8 @@
                 <th scope="row">{{ player.id }}</th> 
                 <td>{{ player.name }}</td> 
                 <td>{{ player.surname }}</td> 
-                <td>{{   teamInfo[player.team_id] }} </td>
+                <td>{{ player.team }} </td>
+			    <td>{{ player.country }} </td>
             
                 <td>
                     <a href="/player/edit/{{ player.id }}" class="btn btn-default">Edit Player</a>
