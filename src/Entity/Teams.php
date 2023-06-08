@@ -12,25 +12,6 @@ use Doctrine\Common\Collections\Collection;
  */
 class Teams
 {
-    #[ORM\OneToMany(targetEntity: Players::class, mappedBy: 'teams')]
-    private $players;
-
-    public function __construct()
-    {
-        $this->players = new ArrayCollection();
-    }
-
-    /**
-     * @return Collection|Players[]
-     */
-    public function getPlayers(): string
-    {
-        return 'simon';
-      //   print_r($this);die();
-        return $this->players;
-    }
-    
-    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
