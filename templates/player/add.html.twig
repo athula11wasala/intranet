@@ -1,0 +1,121 @@
+
+{{ include("layouts/header.html.twig") }}
+
+
+<h2 class="page-header">Player</h2>
+<form action="{{path('player_add') }}" method="POST">
+<table class="table" id="tbl1">
+    <thead> 
+        <tr> 
+           <th>Player Name</th>
+			<th>SurName</th>
+			<th>Team</th> 
+        </tr> 
+    </thead> 
+    <tbody> 
+       <tr> 
+			<td id="col0"><input type="text" required='required' class='form-control' name="playerName[]" value="" /></td> 
+			<td id="col1"><input type="text" required='required' class='form-control' name="surName[]" value="" /></td> 
+			<td id="col2"> 
+			<select name="team[]"  required='required' id="team"  class='form-control'> 
+			
+			</select> 
+		     </td> 
+		       
+		</tr>  
+    </tbody> 
+</table>
+<table> 
+		<tr> 
+			<td><input type="button" class='btn btn-primary' value="Add More Players" onclick="addRows()" />&nbsp;</td> 
+			<td><input type="button" value="Delete Row" class='btn btn-primary' onclick="deleteRows()" />&nbsp;</td> 
+			<td><input type="submit" class='btn btn-primary' value="Submit" /></td> 
+		</tr>  
+	</table> 
+</form>
+
+
+
+
+<h2 class="page-header">Player List</h2>
+
+<table class="table">
+    <thead> 
+        <tr> 
+            <th>#</th> 
+            <th>Name</th> 
+            <th>SurName</th> 
+            <th>Team</th>
+          
+            <th></th> 
+        </tr> 
+    </thead> 
+    <tbody>
+	   
+        {% for player in playerInfo %}
+            <tr> 
+                <th scope="row">{{ player.id }}</th> 
+                <td>{{ player.name }}</td> 
+                <td>{{ player.surname }}</td> 
+                <td>{{   teamInfo[player.team_id] }} </td>
+            
+                <td>
+                    <a href="/player/edit/{{ player.id }}" class="btn btn-default">Edit Player</a>
+                </td> 
+                <td>
+                    <a href="/player/delete/{{ player.id }}" class="btn btn-danger">Delete Player</a>
+                </td> 
+            </tr> 
+        {% endfor %}
+    </tbody> 
+</table>
+
+
+</div>
+{{ include("layouts/footer.html.twig") }}
+
+<script type="text/javascript">
+ $(document).ready(function() {
+
+	var routePath = "{{ path('view_team_info') }}";
+
+	$.ajax({
+		url: routePath,
+		type: "POST",
+		dataType: "json",
+
+	}).done(function(data) {
+		var $dropdown = $("#team");
+		$.each(data.data, function() {
+			$dropdown.append($("<option />").val(this.id).text(this.name));
+		});
+
+	})
+
+});
+
+function addRows() {
+	var table = document.getElementById('tbl1');
+	var rowCount = table.rows.length;
+	var cellCount = table.rows[0].cells.length;
+	var row = table.insertRow(rowCount);
+	for (var i = 0; i <= cellCount; i++) {
+		var cell = 'cell' + i;
+		cell = row.insertCell(i);
+		var copycel = document.getElementById('col' + i).innerHTML;
+		cell.innerHTML = copycel;
+
+	}
+}
+
+function deleteRows() {
+	var table = document.getElementById('tbl1');
+	var rowCount = table.rows.length;
+	if (rowCount > '2') {
+		var row = table.deleteRow(rowCount - 1);
+		rowCount--;
+	} else {
+		alert('There should be atleast one row');
+	}
+}
+</script>

@@ -1,0 +1,53 @@
+
+{{ include("layouts/header.html.twig") }}
+
+<h3> </h3>
+
+
+<h2 class="page-header">Team</h2>
+
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+
+
+<h2 class="page-header">Team: List</h2>
+
+<table class="table">
+    <thead> 
+        <tr> 
+            <th>#</th> 
+            <th>Name</th> 
+            <th>Country</th> 
+            <th></th> 
+        </tr> 
+    </thead> 
+    <tbody> 
+        {% for team in teams %}
+            <tr> 
+                <th scope="row">{{ team.id }}</th> 
+                <td>{{ team.name }}</td> 
+                <td>{{ team.country }}</td> 
+                <td>
+                    <a href="/team/add" class="btn btn-success">Add Team</a>
+                </td> 
+                <td>
+                    <a href="/player/add" class="btn btn-success">Add Players</a>
+                </td> 
+                <td>
+                    <a href="/team/edit/{{ team.id }}" class="btn btn-default">Edit Team</a>
+                </td> 
+                <td>
+                    <a href="/team/delete/{{ team.id }}" class="btn btn-danger">Delete Team</a>
+                </td> 
+            </tr> 
+        {% endfor %}
+    </tbody> 
+</table>
+
+
+
+</div>
+{{ include("layouts/footer.html.twig") }}

@@ -1,0 +1,102 @@
+{{ include("layouts/header.html.twig") }}
+
+<h3> </h3>
+
+
+<h2 class="page-header"> Sell/Buy Player</h2>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+ 
+
+{{ include("layouts/footer.html.twig") }}
+
+
+
+<script type="text/javascript">
+ $(document).ready(function() {
+
+	var routePath = "{{ path('view_team_info') }}";
+
+$.ajax({
+	url: routePath,
+	type: "POST",
+	dataType: "json",
+
+}).done(function(data) {
+	var $dropdown = $(".drp-team");
+	$.each(data.data, function() {
+		$dropdown.append($("<option />").val(this.id).text(this.name));
+	});
+
+	$('.drp-players :selected').html("");
+	populatePlayerInfo($('.drp-team :selected').val());
+
+	pouplateAssignTeam($('.drp-team :selected').val());
+
+})
+
+
+function populatePlayerInfo(teamId) {
+
+	var routePath = "{{ path('ajax_player') }}";
+
+	$.ajax({
+		url: routePath,
+		type: "POST",
+		dataType: "json",
+		data: {
+			'team_id': teamId
+		}
+
+	}).done(function(data) {
+		var $dropdown = $(".drp-players");
+		$.each(data.data, function() {
+			$dropdown.append($("<option />").val(this.id).text(this.name));
+		});
+
+	})
+
+}
+
+$(".drp-team").change(function() {
+	$('.drp-players').html('');
+	populatePlayerInfo(this.value);
+	pouplateAssignTeam(this.value);
+});
+
+
+function pouplateAssignTeam(teamId) {
+	$('.drp-asignteam').html('');
+	var routePath = "{{ path('view_team_info') }}";
+
+	$.ajax({
+		url: routePath,
+		type: "POST",
+		dataType: "json",
+		data: {
+			'team_id': teamId
+		}
+
+	}).done(function(data) {
+		var $dropdown = $(".drp-asignteam");
+		$.each(data.data, function() {
+			$dropdown.append($("<option />").val(this.id).text(this.name));
+		});
+
+	})
+}
+
+    $('input[id="form_amount"]').keyup(function(e) {
+        if (/\D/g.test(this.value)) {
+            // Filter non-digits from input value.
+            this.value = this.value.replace(/\D/g, '');
+        }
+    });
+
+
+});
+
+
+</script>
