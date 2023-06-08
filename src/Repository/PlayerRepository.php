@@ -184,4 +184,15 @@ class PlayerRepository extends ServiceEntityRepository
         }
         return true;
     }
+
+    public function getPlayerWithTeamInfo()
+    {
+        $em = $this->getEntityManager();
+        return  $em->createQuery('select p.name,
+                                  p.id,p.surname,p.team_id,t.name  as team,
+                                  t.country 
+                                  from  App\Entity\Player p
+                                  left Join App\Entity\Teams t with p.team_id = t.id')
+                                  ->execute();
+    }
 }
