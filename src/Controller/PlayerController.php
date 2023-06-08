@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 class PlayerController extends AbstractController
@@ -54,7 +55,7 @@ class PlayerController extends AbstractController
     /**
      * @Route("/player/add", name="player_add")
      */
-    public function addPlayer(Request $request)
+    public function addPlayer(Request $request,PaginatorInterface $paginator)
     {
  
      $playerRepository = $this->getDoctrine()->getRepository(Player::class);
@@ -67,6 +68,14 @@ class PlayerController extends AbstractController
      }
 
      $playerInfo = $playerRepository->getPlayerInfo();
+
+      // Paginate the results of the query
+      $playerInfo = $paginator->paginate(
+        $playerInfo,
+        $request->query->getInt('page', 1),
+        5
+    );
+
      
      if ($request->isMethod('post')) {
 
